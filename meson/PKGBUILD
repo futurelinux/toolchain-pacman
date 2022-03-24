@@ -1,0 +1,12 @@
+pkgname=meson
+pkgver=0.61.3
+source=(https://github.com/mesonbuild/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.gz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	python3 setup.py build
+
+	python3 setup.py install --root=dest
+	cp -rv dest/tools/* /tools
+}

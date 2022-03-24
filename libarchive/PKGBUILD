@@ -1,0 +1,12 @@
+pkgname=libarchive
+pkgver=3.6.0
+source=(https://github.com/$pkgname/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+./configure --prefix=/tools --without-xml2
+
+make
+make install
+}

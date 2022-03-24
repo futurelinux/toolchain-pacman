@@ -1,0 +1,16 @@
+pkgname=bash
+pkgver=5.1.16
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools   \
+	       	--without-bash-malloc
+
+	make
+
+	make install
+
+	ln -vsf bash /tools/bin/sh
+}

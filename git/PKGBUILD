@@ -1,0 +1,17 @@
+pkgname=git
+pkgver=2.35.1
+source=(https://www.kernel.org/pub/software/scm/$pkgname/$pkgname-$pkgver.tar.xz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools                  \
+		    --with-editor=/tools/bin/vim    \
+		    --with-perl=/tools/bin/perl      \
+		    --with-python=/tools/bin/python3 \
+		    --without-tcltk
+
+	make
+
+	make install
+}

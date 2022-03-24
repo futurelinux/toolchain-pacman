@@ -1,0 +1,13 @@
+pkgname=libffi
+pkgver=3.4.2
+source=(https://sourceware.org/ftp/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools
+
+	make
+
+	make install
+}

@@ -1,0 +1,12 @@
+pkgname=xz
+pkgver=5.2.5
+source=(https://tukaani.org/$pkgname/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+./configure --prefix=/tools
+
+make
+make install
+}

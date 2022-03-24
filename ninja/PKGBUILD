@@ -1,0 +1,11 @@
+pkgname=ninja
+pkgver=1.10.2
+source=(https://github.com/ninja-build/$pkgname/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
+
+build() {
+cd $pkgname-$pkgver
+
+python3 ./configure.py --bootstrap
+cp -v ninja /tools/bin
+
+}

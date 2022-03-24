@@ -1,0 +1,12 @@
+pkgname=linux-header
+pkgver=5.16.16
+source=(https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$pkgver.tar.xz)
+
+build() {
+cd  linux-$pkgver
+
+make mrproper
+
+make headers
+cp -rv usr/include/* /tools/include
+}

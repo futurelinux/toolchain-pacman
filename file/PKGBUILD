@@ -1,0 +1,12 @@
+pkgname=file
+pkgver=5.41
+source=(ftp://ftp.astron.com/pub/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+cd $pkgname-$pkgver
+
+./configure --prefix=/tools
+
+make
+make install
+}

@@ -1,0 +1,12 @@
+pkgname=zlib
+pkgver=1.2.11
+source=(https://www.zlib.net/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+./configure --prefix=/tools
+
+make
+make install
+}

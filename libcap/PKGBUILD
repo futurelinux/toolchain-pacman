@@ -1,0 +1,15 @@
+pkgname=libcap
+pkgver=2.63
+source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/$pkgname-$pkgver.tar.xz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	sed -i '/install -m.*STA/d' libcap/Makefile
+
+	make prefix=/tools lib=lib PAM_CAP=no
+
+	make prefix=/tools lib=lib PAM_CAP=no install
+
+	chmod -v 755 /tools/lib/lib{cap,psx}.so.$pkgver
+}

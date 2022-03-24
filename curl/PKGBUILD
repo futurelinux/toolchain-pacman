@@ -1,0 +1,16 @@
+pkgname=curl
+pkgver=7.82.0
+source=(https://curl.se/download/$pkgname-$pkgver.tar.xz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools        \
+		    --with-ssl                 \
+		    --enable-threaded-resolver \
+		    --with-ca-bundle=/tools/etc/ssl/certs/ca-certificates.crt
+
+	make
+
+	make install
+}

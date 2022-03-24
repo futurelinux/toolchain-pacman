@@ -1,0 +1,17 @@
+pkgname=util-linux
+pkgver=2.37.4
+source=(https://www.kernel.org/pub/linux/utils/$pkgname/v${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+./configure --prefix=/tools \
+--without-python \
+--disable-makeinstall-chown \
+--without-systemdsystemunitdir \
+--without-ncurses              \
+PKG_CONFIG=""
+
+make
+make install
+}

@@ -1,0 +1,15 @@
+pkgname=fakeroot
+pkgver=1.28
+source=(http://http.debian.net/debian/pool/main/f/$pkgname/${pkgname}_${pkgver}.orig.tar.gz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools                 \
+	            --libdir=/tools/lib/libfakeroot \
+	            --with-ipc=sysv
+
+	make
+
+	make install
+}

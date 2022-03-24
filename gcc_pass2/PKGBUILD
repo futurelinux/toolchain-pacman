@@ -1,0 +1,65 @@
+pkgname=gcc_pass2
+pkgver=11.2.0
+gmpver=6.2.1
+mpfrver=4.1.0
+mpcver=1.2.1
+source=(https://ftp.gnu.org/gnu/gmp/gmp-$gmpver.tar.xz
+https://ftp.gnu.org/gnu/mpfr/mpfr-$mpfrver.tar.xz
+https://ftp.gnu.org/gnu/mpc/mpc-$mpcver.tar.gz
+https://ftp.gnu.org/gnu/${pkgname%_*}/${pkgname%_*}-$pkgver/${pkgname%_*}-$pkgver.tar.xz)
+
+build() {
+cd  ${pkgname%_*}-$pkgver
+
+cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
+  $(dirname $($LFS_TGT-gcc -print-libgcc-file-name))/include-fixed/limits.h
+
+for file in gcc/config/{linux,i386/linux{,64}}.h
+do
+  cp -uv $file{,.orig}
+  sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
+      -e 's@/usr@/tools@g' $file.orig > $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+  touch $file.orig
+done
+
+case $(uname -m) in
+  x86_64)
+    sed -e '/m64=/s/lib64/lib/' \
+        -i.orig gcc/config/i386/t-linux64
+  ;;
+esac
+
+mv ../gmp-$gmpver gmp
+mv ../mpfr-$mpfrver mpfr
+mv ../mpc-$mpcver mpc
+
+
+mkdir -v build
+cd build
+
+CC=$LFS_TGT-gcc                                   \
+CXX=$LFS_TGT-g++                                  \
+AR=$LFS_TGT-ar                                    \
+RANLIB=$LFS_TGT-ranlib                            \
+../configure                                         \
+    --prefix=/tools                                  \
+    --with-local-prefix=/tools                       \
+    --with-native-system-header-dir=/tools/include   \
+    --enable-languages=c,c++                         \
+    --disable-libstdcxx-pch                          \
+    --disable-multilib                               \
+    --with-system-zlib                               \
+    --disable-bootstrap                              \
+    --disable-libgomp
+
+
+make
+make install
+
+ln -sv gcc /tools/bin/cc
+}

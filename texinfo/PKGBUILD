@@ -1,0 +1,15 @@
+pkgname=texinfo
+pkgver=6.8
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+sed -e 's/__attribute_nonnull__/__nonnull/' \
+    -i gnulib/lib/malloc/dynarray-skeleton.c
+
+./configure --prefix=/tools
+
+make
+make install
+}

@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# Functions
+#
+
+abort() {
+	echo " ===> ERROR: $i"
+	exit 1
+}
+
+#
+## Begin
+#
+
+if [ -z "$LOG" ]; then
+	PASS=`pwd`
+	PASS=`basename $PASS`
+	LOG=$HOME/logs/$PASS
+fi
+
+if [ ! -d $LOG ]; then
+	mkdir -p $LOG
+fi
+
+if [ ! -f .list ]; then
+	LIST="list"
+else
+	LIST="list"
+fi
+
+for DIR in `cat $LIST`
+do
+	NAME=`basename $DIR`
+	BUILD="yes"
+	if [ -f ${LOG}/$NAME.log ]; then
+		if ( grep "^=======>" ${LOG}/$NAME.log|grep "succeeded"  > /dev/null); then
+			BUILD="no"
+		else
+			BUILD="yes"
+		fi
+	fi
+
+	if [ "$BUILD" == "yes" ]; then
+		cd $DIR
+		case $PASS in
+			toolchain-pacman)
+				$HOME/toolchain-pacman/pkgmk -cf $HOME/toolchain-pacman/pkgmk.conf -kw 2>&1|tee ${LOG}/$NAME.log || exit 1;;
+
+		esac
+
+		if ( grep "^=======>" ${LOG}/$NAME.log|grep "succeeded"  > /dev/null); then
+			echo "done"
+		else
+			exit 1
+		fi
+
+		if ( grep "^=======>" ${LOG}/$NAME.log| tail -1 |grep "ERROR"  > /dev/null); then
+			exit 1
+		fi
+		cd -
+	fi
+done

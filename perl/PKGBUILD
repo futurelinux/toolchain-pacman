@@ -1,0 +1,15 @@
+pkgname=perl
+pkgver=5.34.1
+source=(https://ftp.funet.fi/pub/CPAN/src/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+sh Configure -des -Dprefix=/tools -Dlibs=-lm -Uloclibpth -Ulocincpth
+
+make
+
+cp -v perl cpan/podlators/scripts/pod2man /tools/bin
+mkdir -pv /tools/lib/perl5/$pkgver
+cp -Rv lib/* /tools/lib/perl5/$pkgver
+}

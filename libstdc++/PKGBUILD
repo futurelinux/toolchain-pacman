@@ -1,0 +1,22 @@
+pkgname=libstdc++
+pkgver=11.2.0
+source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz)
+
+build() {
+cd  gcc-$pkgver
+
+mkdir -pv build
+cd build
+
+../libstdc++-v3/configure           \
+    --host=$LFS_TGT              \
+    --prefix=/tools                 \
+    --disable-multilib              \
+    --disable-nls                   \
+    --disable-libstdcxx-threads     \
+    --disable-libstdcxx-pch         \
+    --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/$pkgver
+
+make
+make install
+}

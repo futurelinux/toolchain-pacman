@@ -1,0 +1,13 @@
+pkgname=gettext
+pkgver=0.21
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.xz)
+
+build() {
+cd $pkgname-$pkgver
+
+./configure --prefix=/tools --disable-shared
+
+make
+
+cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /tools/bin
+}

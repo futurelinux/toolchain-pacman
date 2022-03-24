@@ -1,0 +1,10 @@
+pkgname=zstd
+pkgver=1.5.2
+source=(https://github.com/facebook/zstd/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz)
+
+build() {
+cd $pkgname-$pkgver
+
+make
+make prefix=/tools install
+}

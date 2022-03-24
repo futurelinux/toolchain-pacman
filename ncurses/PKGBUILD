@@ -1,0 +1,18 @@
+pkgname=ncurses
+pkgver=6.3
+source=(ftp://invisible-island.net/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+cd $pkgname-$pkgver
+
+sed -i s/mawk// configure
+
+./configure --prefix=/tools --with-shared \
+ --without-debug --without-ada --enable-widec  \
+ --enable-overwrite
+	
+make	
+make install
+
+ln -s libncursesw.so /tools/lib/libncurses.so
+}

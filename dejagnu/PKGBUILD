@@ -1,0 +1,11 @@
+pkgname=dejagnu
+pkgver=1.6.3
+source=(https://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools
+
+	make install
+}

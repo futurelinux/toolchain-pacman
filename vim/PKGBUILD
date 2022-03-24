@@ -1,0 +1,13 @@
+pkgname=vim
+pkgver=8.2.4597
+source=(https://github.com/vim/vim/archive/v$pkgver/$pkgname-$pkgver.tar.gz)
+
+build() {
+	cd $pkgname-$pkgver
+
+	./configure --prefix=/tools --with-features=huge --with-x=no --enable-gui=no
+
+	make
+
+	make install
+}

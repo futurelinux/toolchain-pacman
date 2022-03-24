@@ -1,0 +1,24 @@
+pkgname=pacman
+pkgver=6.0.1
+source=(https://sources.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.xz
+makepkg.conf
+pacman.conf)
+
+build() {
+	cd $pkgname-$pkgver
+
+	meson --prefix=/tools                      \
+	      --buildtype=release                  \
+	      --sysconfdir=/tools/etc              \
+	      -Ddoc=disabled                       \
+	      -Dgpgme=disabled                     \
+	      build
+
+	meson compile -C build
+
+	DESTDIR="$PWD/DESTDIR" meson install -C build
+	cp -av DESTDIR/tools/* /tools/
+
+	install -vDm644 ../makepkg.conf /tools/etc/makepkg.conf
+	install -vDm644 ../pacman.conf  /tools/etc/pacman.conf
+}
